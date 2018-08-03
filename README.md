@@ -1,5 +1,4 @@
 # discord-logs
----
 Keeps a plain-text log file of every Discord private conversation.
 
 ---

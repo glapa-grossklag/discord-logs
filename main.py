@@ -12,7 +12,7 @@ parser.add_argument("password", help = "Discord password to login with")
 parser.add_argument("--flushlogs", help = "clear all previously stored chat logs", action = "store_true")
 args = parser.parse_args()
 
-def log(message, text):
+def write_to_log(message, text):
     # Select ID to use in logfile name
     filename = message.channel.recipients[0].id if (message.author == client.user) else message.author.id
     with open("./logs/" + filename + ".log", "a") as file:
@@ -40,6 +40,11 @@ async def on_ready():
 @client.event
 async def on_message(message):
     if not message.channel.is_private: return
-    log(message, message.content)
+    write_to_log(message, message.content)
+
+@client.event
+async def on_message_edit(before, after):
+    if not before.channel.is_private: return
+    write_to_log(before, before.content +  "\n  EDITED TO\n" + after.content)
 
 client.run(args.email, args.password)
